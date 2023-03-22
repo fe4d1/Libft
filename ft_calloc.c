@@ -12,23 +12,23 @@
 
 #include "libft.h"
 
-void	*ft_calloc(size_t nmemb, size_t size)
+void *ft_calloc_overflow(size_t nmemb, size_t size)
 {
 	size_t	total_size;
-	size_t	i;
-	char	*ptr;
+	size_t	num_elems;
+	void	*ptr;
 
 	total_size = nmemb * size;
-	ptr = (char *)malloc(total_size);
+	num_elems = nmemb;
+	if (num_elems != 0 && total_size / num_elems != size)
+	{
+		return (NULL);
+	}
+	ptr = malloc(total_size);
 	if (ptr == NULL)
 	{
 		return (NULL);
 	}
-	i = 0;
-	while (i < total_size)
-	{
-		ptr[i] = 0;
-		i++;
-	}
+	ft_bzero(ptr, total_size);
 	return (ptr);
 }
