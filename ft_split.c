@@ -38,7 +38,7 @@ static char	*ft_place_words(char const *s, char c, int *newi)
 	return (word);
 }
 
-char		**ft_strsplit(char const *s, char c)
+char		**ft_split(char const *s, char c)
 {
 	char	**strings;
 	int		i;
