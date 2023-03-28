@@ -12,56 +12,59 @@
 
 #include "libft.h"
 
-
-static char	*ft_place_words(char const *s, char c, int *newi)
+static void	ft_allocate(char **tab, char const *s, char sep)
 {
-	int     i;
-	char    *word;
-	int     begin;
+	char		**tab_p;
+	char const	*tmp;
 
-	i = 0;
-	while (s[*newi] == c && s[*newi])
-		(*newi)++;
-	begin = *newi;
-	while (s[*newi] != c && s[*newi])
-		(*newi)++;
-	if (!(word = malloc(*newi - begin + 1)))
-		return (NULL);
-	i = 0;
-	while (begin < *newi)
+	tmp = s;
+	tab_p = tab;
+	while (*tmp)
 	{
-		word[i] = s[begin];
-		i++;
-		begin++;
+		while (*s == sep)
+			++s;
+		tmp = s;
+		while (*tmp && *tmp != sep)
+			++tmp;
+		if (*tmp == sep || tmp > s)
+		{
+			*tab_p = ft_substr(s, 0, tmp - s);
+			s = tmp;
+			++tab_p;
+		}
 	}
-	word[i] = '\0';
-	return (word);
+	*tab_p = NULL;
 }
 
-char		**ft_split(char const *s, char c)
+static int	ft_count_words(char const *s, char sep)
 {
-	char	**strings;
-	int		i;
-	int		count;
-	int		k;
+	int	word_count;
 
-	k = 0;
-	count = 0;
-	i = 0;
-	if (!s || !c)
-		return (NULL);
-	while (s[i] != '\0')
+	word_count = 0;
+	while (*s)
 	{
-		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
-			count++;
-		i++;
+		while (*s == sep)
+			++s;
+		if (*s)
+			++word_count;
+		while (*s && *s != sep)
+			++s;
 	}
-	i = 0;
-	strings = (char **)malloc((count + 1) * sizeof(char *));
-	if (!strings)
-		return (NULL);
-	while (i < count)
-		strings[i++] = ft_place_words(s, c, &k);
-	strings[i] = 0;
-	return (strings);
+	return (word_count);
 }
+
+char	**ft_split(char const *s, char c)
+{
+	char	**new;
+	int		size;
+
+	if (!s)
+		return (NULL);
+	size = ft_count_words(s, c);
+	new = (char **)malloc(sizeof(char *) * (size + 1));
+	if (!new)
+		return (NULL);
+	ft_allocate(new, s, c);
+	return (new);
+}
+
