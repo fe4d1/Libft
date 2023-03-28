@@ -12,69 +12,46 @@
 
 #include "libft.h"
 
-static int	get_num_len(int n)
-{
-	int	len;
-
-	len = 0;
-	if (n == 0)
-	{
-		return (1);
-	}
-	if (n < 0)
-	{
-		len++;
-		n = -n;
-	}
-	while (n > 0)
-	{
-		len++;
-		n /= 10;
-	}
-	return (len);
-}
-
-static void	reverse_str(char *str, int len)
+static int	ft_nbrlen(int n)
 {
 	int	i;
-	int	j;
-	char	tmp;
 
 	i = 0;
-	j = len - 1;
-	while (i < j)
+	if (n <= 0)
+		i = 1;
+	while (n)
 	{
-		tmp = str[i];
-		str[i++] = str[j];
-		str[j--] = tmp;
+		n /= 10;
+		++i;
 	}
+	return (i);
 }
 
 char	*ft_itoa(int n)
 {
-	int	sign;
-	int	len;
 	char	*str;
-	int	i;
+	int		len;
 
-	len = get_num_len(n);
-	str = malloc(len + 1);
-	i = 0;
-	if (n < 0)
-		sign = -1;
-		n = -n;
-	else
-		sign = 1;
+	len = ft_nbrlen(n);
+	str = ft_calloc(len + 1, sizeof(char));
 	if (!str)
 		return (NULL);
-	while (n != 0)
+	if (n == 0)
+		str[0] = '0';
+	if (n < 0)
 	{
-		str[i++] = (n % 10) * sign + '0';
+		str[0] = '-';
+		if (n == INT_MIN)
+		{
+			str[--len] = '8';
+			n /= 10;
+		}
+		n = -n;
+	}
+	while (len-- && n != 0)
+	{
+		str[len] = (n % 10) + '0';
 		n /= 10;
 	}
-	if (sign == -1)
-		str[i++] = '-';
-	str[i] = '\0';
-	reverse_str(str, i);
 	return (str);
 }
