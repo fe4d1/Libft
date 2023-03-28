@@ -52,12 +52,21 @@ SRCS = \
   ft_toupper.c \
   ft_strtrim.c 
 
+SRCS_B = ft_lstnew.c			\
+		ft_lstadd_front.c	\
+		ft_lstsize.c		\
+		ft_lstlast.c		\
+		ft_lstadd_back.c	\
+		ft_lstclear.c		\
+		ft_lstdelone.c		\
+		ft_lstiter.c		\
+		ft_lstmap.c			\
 
 OBJS_DIR = objs/
-OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
-
+OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.c=.o) $(SRCS_B:.c=.o))
 
 all: $(NAME)
+
 $(OBJS_DIR)%.o : $(LIBFT_PATH)%.c libft.h
 	@mkdir -p $(OBJS_DIR)
 	@echo "Compiling: $<"
